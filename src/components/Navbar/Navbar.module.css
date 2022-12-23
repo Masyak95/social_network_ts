@@ -1,0 +1,11 @@
+.nav {
+    grid-area: n;
+    background-color: wheat;
+}
+.item a {
+    color: blue;
+    text-decoration: none;
+}
+.item a.activeLink{
+    color: blueviolet;
+}
