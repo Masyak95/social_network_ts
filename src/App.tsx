@@ -8,8 +8,9 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {StateType} from "./redux/state";
 
 type AppType = {
-   state: StateType
-    addPost: (postMessage: string)=>void
+    state: StateType
+    addPost: (postMessage: string) => void
+    changeNewText: (newText: string) => void
 }
 
 const App = (props: AppType) => {
@@ -22,6 +23,7 @@ const App = (props: AppType) => {
                     <Routes>
                         <Route path='/profile' element={<Profile profilePage={props.state.profilePage}
                                                                  addPost={props.addPost}
+                                                                 changeNewText={props.changeNewText}
                         />}/>
                         <Route path='/dialogs' element={<Dialogs state={props.state.dialogsPage}/>}/>
                     </Routes>
