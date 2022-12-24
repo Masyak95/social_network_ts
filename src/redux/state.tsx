@@ -1,19 +1,21 @@
+import {v1} from "uuid";
+import {rerenderEntireTree} from "../render";
 
 
 export type PostDataType = {
     message: string
-    id: number
+    id: string
     likesCount:number
 }
 
 export type DialogsDataType = {
-    id: number
+    id: string
     name: string
 }
 
 export type MessageDataType = {
     message: string
-    id: number
+    id: string
 }
 
 export type ProfilePageType = {
@@ -33,26 +35,36 @@ export type StateType = {
 export let state: StateType = {
     profilePage: {
         posts: [
-            {id: 1, message: 'Hi, how are you?', likesCount: 12},
-            {id: 2, message: 'It\'s my first post', likesCount: 11},
-            {id: 2, message: 'It\'s my second post', likesCount: 2},
+            {id: v1(), message: 'Hi, how are you?', likesCount: 12},
+            {id: v1(), message: 'It\'s my first post', likesCount: 11},
+            {id: v1(), message: 'It\'s my second post', likesCount: 2},
         ]
     },
     dialogsPage: {
         dialogsData: [
-            {id: 1, name: 'Etienne Mandel Tristan'},
-            {id: 2, name: 'John Barnes'},
-            {id: 3, name: 'Jenelle Lacey Jasmyn'},
-            {id: 4, name: 'Toya Avery Rahel'},
-            {id: 5, name: 'Arnold Fraser'},
-            {id: 6, name: 'Lillian Gilson'}
+            {id: v1(), name: 'Etienne Mandel Tristan'},
+            {id: v1(), name: 'John Barnes'},
+            {id: v1(), name: 'Jenelle Lacey Jasmyn'},
+            {id: v1(), name: 'Toya Avery Rahel'},
+            {id: v1(), name: 'Arnold Fraser'},
+            {id: v1(), name: 'Lillian Gibson'}
         ],
         messagesData: [
-            {id: 1, message: 'Keep Your Shirt On'},
-            {id: 2, message: 'How is your it-study?'},
-            {id: 3, message: 'Jaws of Death'},
-            {id: 4, message: 'Hi!'},
-            {id: 5, message: 'Yo'}
+            {id: v1(), message: 'Keep Your Shirt On'},
+            {id: v1(), message: 'How is your it-study?'},
+            {id: v1(), message: 'Jaws of Death'},
+            {id: v1(), message: 'Hi!'},
+            {id: v1(), message: 'Yo'}
         ]
     }
+}
+
+export let addPost = (postMessage: string) => {
+    let newPost: PostDataType = {
+        id:v1(),
+        message: postMessage,
+        likesCount: 0
+    }
+    state.profilePage.posts.push(newPost)
+    rerenderEntireTree(state)
 }
