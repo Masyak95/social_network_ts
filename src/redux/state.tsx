@@ -34,23 +34,13 @@ export type StateType = {
 
 export type StoreType = {
     _state: StateType
-    changeNewText: (newText: string) => void
-    addPost: (postMessage: string) => void
     _onChange: () => void
     subscribe: (observer: () => void) => void
     getState: () => StateType
-    dispatch:(action: ActionsTypes)=>void
+    dispatch: (action: ActionsTypes) => void
 }
 
-export type ActionType = {
-    type: "ADD-POST"
-    postMessage: string
-}
-export type ChangeNewTextActionType = {
-    type: "UPDATE-NEW-POST-TEXT"
-    newText: string
-}
-export type ActionsTypes = ActionType | ChangeNewTextActionType
+
 
 let store: StoreType = {
     _state: {
@@ -83,38 +73,52 @@ let store: StoreType = {
     _onChange() {
         console.log("state changed")
     },
-    changeNewText(newText: string) {
-        this._state.profilePage.newPostText = newText
-        this._onChange()
-    },
-    addPost(postMessage: string) {
-        const newPost: PostDataType = {
-            id: v1(),
-            message: postMessage,
-            likesCount: 0
-        }
-        this._state.profilePage.posts.push(newPost)
-        this._onChange()
-    },
     subscribe(observer) {
         this._onChange = observer
     },
     getState() {
         return this._state
     },
-    dispatch(action){
-    if(action.type==="ADD-POST"){
-        const newPost: PostDataType = {
-            id: v1(),
-            message: action.postMessage,
-            likesCount: 0
+    dispatch(action) {
+        if (action.type === "ADD-POST") {
+            const newPost: PostDataType = {
+                id: v1(),
+                message: action.postMessage,
+                likesCount: 0
+            }
+            this._state.profilePage.posts.push(newPost)
+            this._onChange()
+        } else if (action.type === "UPDATE-NEW-POST-TEXT") {
+            this._state.profilePage.newPostText = action.newText
+            this._onChange()
         }
-        this._state.profilePage.posts.push(newPost)
-        this._onChange()
-    }else if(action.type==="UPDATE-NEW-POST-TEXT"){
-        this._state.profilePage.newPostText = action.newText
-        this._onChange()
-    }
     }
 }
+
+
+export type ActionsTypes = ReturnType<typeof addPostAC> | ReturnType<typeof changeNewTextAC>
+
+export const addPostAC = (postText: string) => {
+    return {
+        type: "ADD-POST",
+        postMessage: postText
+    }as const
+}
+
+export const changeNewTextAC = (newText: string) => {
+    return {
+        type: "UPDATE-NEW-POST-TEXT",
+        newText: newText
+    }as const
+}
+
+
 export default store
+
+
+
+
+
+
+
+
