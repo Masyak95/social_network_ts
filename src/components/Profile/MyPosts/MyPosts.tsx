@@ -12,7 +12,7 @@ type MyPostsType = {
 
 const MyPosts = (props: MyPostsType) => {
 
-    let posts = props.posts.map(el => <Post message={el.message} key={el.id} likesCount={el.likesCount} id={el.id}/>)
+    const posts = props.posts.map(el => <Post message={el.message} key={el.id} likesCount={el.likesCount} id={el.id}/>)
 
     // let newPostElement = React.createRef<HTMLTextAreaElement>()
 

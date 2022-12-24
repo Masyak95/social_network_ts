@@ -1,5 +1,5 @@
 import {v1} from "uuid";
-import {rerenderEntireTree} from "../render";
+// import {onChange} from "../render";
 
 
 export type PostDataType = {
@@ -33,7 +33,11 @@ export type StateType = {
     dialogsPage: DialogsPageType
 }
 
-export let state: StateType = {
+let onChange = () => {
+    console.log("rendering")
+}
+
+export const state: StateType = {
     profilePage: {
         newPostText: "",
         posts: [
@@ -68,10 +72,14 @@ export const addPost = (postMessage: string) => {
         likesCount: 0
     }
     state.profilePage.posts.push(newPost)
-    rerenderEntireTree(state)
+    onChange()
 }
 
 export const changeNewText = (newText: string)=> {
     state.profilePage.newPostText=newText
-    rerenderEntireTree(state)
+    onChange()
+}
+
+export const subscribe = (observer:()=>void) => {
+    onChange=observer
 }
