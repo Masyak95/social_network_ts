@@ -24,7 +24,8 @@ export type ProfilePageType = {
 
 export type DialogsPageType = {
     dialogsData: DialogsDataType[],
-    messagesData: MessageDataType[]
+    messagesData: MessageDataType[],
+    newMessageBody: string
 }
 
 export type StateType = {
@@ -39,7 +40,6 @@ export type StoreType = {
     getState: () => StateType
     dispatch: (action: ActionsTypes) => void
 }
-
 
 
 let store: StoreType = {
@@ -67,7 +67,8 @@ let store: StoreType = {
                 {id: v1(), message: 'Jaws of Death'},
                 {id: v1(), message: 'Hi!'},
                 {id: v1(), message: 'Yo'}
-            ]
+            ],
+            newMessageBody: ""
         }
     },
     _onChange() {
@@ -91,28 +92,51 @@ let store: StoreType = {
         } else if (action.type === "UPDATE-NEW-POST-TEXT") {
             this._state.profilePage.newPostText = action.newText
             this._onChange()
+        } else if (action.type === "UPDATE-NEW-MESSAGE-BODY") {
+            this._state.dialogsPage.newMessageBody = action.newMessageBody
+            this._onChange()
+        } else if (action.type === "SEND-MESSAGE") {
+            let body = this._state.dialogsPage.newMessageBody
+            this._state.dialogsPage.newMessageBody = ""
+            this._state.dialogsPage.messagesData.push({id: v1(), message: body})
+            this._onChange()
         }
     }
 }
 
 
-export type ActionsTypes = ReturnType<typeof addPostAC> | ReturnType<typeof changeNewTextAC>
+export type ActionsTypes =
+    ReturnType<typeof addPostAC>
+    | ReturnType<typeof changeNewTextAC>
+    | ReturnType<typeof newMessageBodyAC>
+    | ReturnType<typeof sendMessageAC>
 
 export const addPostAC = (postText: string) => {
     return {
         type: "ADD-POST",
         postMessage: postText
-    }as const
+    } as const
 }
 
 export const changeNewTextAC = (newText: string) => {
     return {
         type: "UPDATE-NEW-POST-TEXT",
         newText: newText
-    }as const
+    } as const
 }
 
+export const newMessageBodyAC = (newMessageBody: string) => {
+    return {
+        type: "UPDATE-NEW-MESSAGE-BODY",
+        newMessageBody: newMessageBody
+    } as const
+}
 
+export const sendMessageAC = () => {
+    return {
+        type: "SEND-MESSAGE"
+    } as const
+}
 export default store
 
 

@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import s from './Dialogs.module.css';
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
-import {DialogsPageType} from "../../redux/state";
+import {ActionsTypes, DialogsPageType, newMessageBodyAC, sendMessageAC} from "../../redux/state";
 
 
 type DialogsPropsType = {
     state: DialogsPageType
+    dispatch: (action: ActionsTypes) => void
 }
 
 const Dialogs = (props: DialogsPropsType) => {
@@ -17,6 +18,17 @@ const Dialogs = (props: DialogsPropsType) => {
     let messageElements = props.state.messagesData
         .map(el => <Message message={el.message} id={el.id}/>)
 
+    let newMessageBody = props.state.newMessageBody
+
+
+    let onSendMessageClick = ()=>{
+        props.dispatch(sendMessageAC())
+    }
+
+    let onNewMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        let body = e.target.value
+        props.dispatch(newMessageBodyAC(body))
+    }
 
     return (
         <div className={s.dialogs}>
@@ -25,7 +37,9 @@ const Dialogs = (props: DialogsPropsType) => {
             </div>
 
             <div className={s.messages}>
-                {messageElements}
+               <div>{messageElements}</div>
+                <div><textarea value={newMessageBody} onChange={onNewMessageChange} placeholder={"Enter your message"} ></textarea></div>
+                <div><button onClick={onSendMessageClick}>Send</button></div>
             </div>
         </div>
     )
