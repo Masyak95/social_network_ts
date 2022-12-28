@@ -1,37 +1,30 @@
-import React, {ChangeEvent} from 'react';
-import {ActionsTypes, PostDataType} from '../../../redux/state';
+import React from 'react';
+import { PostDataType} from '../../../redux/store';
 import s from "../Profile.module.css";
 import Post from "./Post/Post";
 
 type MyPostsType = {
     newPostText: string,
     posts: PostDataType[],
-    dispatch: (action: ActionsTypes)=>void
+    updateNewPostText: (text: string) => void
+    addPost: ()=>void
 }
 
 const MyPosts = (props: MyPostsType) => {
 
     const posts = props.posts.map(el => <Post message={el.message} key={el.id} likesCount={el.likesCount} id={el.id}/>)
+    let newPostElement = React.createRef<HTMLTextAreaElement>();
 
     const addPost = () => {
-        // props.addPost(props.newPostText)
-        props.dispatch({ type: "ADD-POST", postMessage: props.newPostText})
+        props.addPost()
     }
 
-    // const newTextChangeHandler = () => {
-    //     props.dispatch({type: "UPDATE-NEW-POST-TEXT", newText: props.newPostText })
-    // }
+    const onPostChange=()=>{
+        let text = newPostElement.current?.value
+        if (text) {
+            props.updateNewPostText(text)
+        }
 
-    const updateNewPostTextAC=(event:ChangeEvent<HTMLTextAreaElement>)=>{
-        const text=event.currentTarget.value
-        return{
-            type:'UPDATE-NEW-POST-TEXT',
-            newText: text
-        } as const
-    }
-
-    const onChangeHandler=(newText:ChangeEvent<HTMLTextAreaElement>)=>{
-        props.dispatch(updateNewPostTextAC(newText))
     }
 
     return (
@@ -40,7 +33,7 @@ const MyPosts = (props: MyPostsType) => {
             <div>
                 <div>
                     <textarea value={props.newPostText}
-                              onChange={onChangeHandler}
+                              onChange={onPostChange}
                     />
                 </div>
                 <div>

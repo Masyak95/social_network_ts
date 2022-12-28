@@ -1,8 +1,28 @@
 import React from 'react';
 import {v1} from "uuid";
-import {ActionsTypes, DialogsPageType} from "./state";
+import {ActionsTypes, DialogsPageType} from "./store";
 
-const dialogsReducer = (state: DialogsPageType, action: ActionsTypes) => {
+
+let initialState = {
+    dialogsData: [
+        {id: v1(), name: 'Etienne Mandel Tristan'},
+        {id: v1(), name: 'John Barnes'},
+        {id: v1(), name: 'Jenelle Lacey Jasmyn'},
+        {id: v1(), name: 'Toya Avery Rahel'},
+        {id: v1(), name: 'Arnold Fraser'},
+        {id: v1(), name: 'Lillian Gibson'}
+    ],
+    messagesData: [
+        {id: v1(), message: 'Keep Your Shirt On'},
+        {id: v1(), message: 'How is your it-study?'},
+        {id: v1(), message: 'Jaws of Death'},
+        {id: v1(), message: 'Hi!'},
+        {id: v1(), message: 'Yo'}
+    ],
+    newMessageBody: ""
+}
+
+const dialogsReducer = (state: DialogsPageType = initialState, action: ActionsTypes) => {
     switch (action.type) {
         case "UPDATE-NEW-MESSAGE-BODY":
             state.newMessageBody = action.newMessageBody

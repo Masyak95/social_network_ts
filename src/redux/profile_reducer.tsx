@@ -1,8 +1,18 @@
 import React from 'react';
 import {v1} from "uuid";
-import {ActionsTypes, PostDataType, ProfilePageType} from "./state";
+import {ActionsTypes, PostDataType, ProfilePageType} from "./store";
 
-const profileReducer = (state: ProfilePageType, action: ActionsTypes) => {
+
+let initialState = {
+    newPostText: "",
+    posts: [
+        {id: v1(), message: 'Hi, how are you?', likesCount: 12},
+        {id: v1(), message: 'It\'s my first post', likesCount: 11},
+        {id: v1(), message: 'It\'s my second post', likesCount: 2},
+    ]
+}
+
+const profileReducer = (state: ProfilePageType = initialState, action: ActionsTypes) => {
 
     switch (action.type) {
         case "ADD-POST":
@@ -20,7 +30,6 @@ const profileReducer = (state: ProfilePageType, action: ActionsTypes) => {
         default:
             return state
     }
-
 }
 
 export const addPostAC = (postText: string) => {
