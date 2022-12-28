@@ -1,4 +1,7 @@
 import {v1} from "uuid";
+import profileReducer, {addPostAC, changeNewTextAC} from "./profile_reducer";
+import dialogsReducer, {newMessageBodyAC, sendMessageAC} from "./dialogs_reducer";
+import sidebarReducer from "./sidebar_reducer";
 
 
 export type PostDataType = {
@@ -30,7 +33,8 @@ export type DialogsPageType = {
 
 export type StateType = {
     profilePage: ProfilePageType,
-    dialogsPage: DialogsPageType
+    dialogsPage: DialogsPageType,
+    sidebar: {}
 }
 
 export type StoreType = {
@@ -69,7 +73,8 @@ let store: StoreType = {
                 {id: v1(), message: 'Yo'}
             ],
             newMessageBody: ""
-        }
+        },
+        sidebar:{}
     },
     _onChange() {
         console.log("state changed")
@@ -81,29 +86,13 @@ let store: StoreType = {
         return this._state
     },
     dispatch(action) {
-        if (action.type === "ADD-POST") {
-            const newPost: PostDataType = {
-                id: v1(),
-                message: action.postMessage,
-                likesCount: 0
-            }
-            this._state.profilePage.posts.push(newPost)
-            this._onChange()
-        } else if (action.type === "UPDATE-NEW-POST-TEXT") {
-            this._state.profilePage.newPostText = action.newText
-            this._onChange()
-        } else if (action.type === "UPDATE-NEW-MESSAGE-BODY") {
-            this._state.dialogsPage.newMessageBody = action.newMessageBody
-            this._onChange()
-        } else if (action.type === "SEND-MESSAGE") {
-            let body = this._state.dialogsPage.newMessageBody
-            this._state.dialogsPage.newMessageBody = ""
-            this._state.dialogsPage.messagesData.push({id: v1(), message: body})
-            this._onChange()
-        }
+        this._state.profilePage = profileReducer(this._state.profilePage, action)
+        this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action)
+        this._state.sidebar = sidebarReducer(this._state.sidebar, action)
+
+        this._onChange()
     }
 }
-
 
 export type ActionsTypes =
     ReturnType<typeof addPostAC>
@@ -111,32 +100,7 @@ export type ActionsTypes =
     | ReturnType<typeof newMessageBodyAC>
     | ReturnType<typeof sendMessageAC>
 
-export const addPostAC = (postText: string) => {
-    return {
-        type: "ADD-POST",
-        postMessage: postText
-    } as const
-}
 
-export const changeNewTextAC = (newText: string) => {
-    return {
-        type: "UPDATE-NEW-POST-TEXT",
-        newText: newText
-    } as const
-}
-
-export const newMessageBodyAC = (newMessageBody: string) => {
-    return {
-        type: "UPDATE-NEW-MESSAGE-BODY",
-        newMessageBody: newMessageBody
-    } as const
-}
-
-export const sendMessageAC = () => {
-    return {
-        type: "SEND-MESSAGE"
-    } as const
-}
 export default store
 
 
