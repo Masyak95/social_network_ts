@@ -11,8 +11,8 @@ type MyPostsContainerType = {
 export const MyPostsContainer = (props: MyPostsContainerType) => {
     let state = props.store.getState()
 
-    let addPost = () => {
-        store.dispatch(addPostAC(""))
+    let addPost = (text: string) => {
+        store.dispatch(addPostAC(text))
     }
 
     let onPostChange = (text: string) => {
